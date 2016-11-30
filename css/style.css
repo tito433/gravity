@@ -1,4 +1,9 @@
-html,body{padding: 0;margin: 0;height: 100%;color:#444;}
+html,body{
+    margin: 0;
+    height: 100%;
+    color: #444;
+    box-sizing: border-box;}
+body{padding: 10px;}
 div#menu {
   width: 300px;
   margin: 0;
@@ -58,34 +63,35 @@ div#menu h1{
     height: 1500px;
 }
 
-div#output{
-  padding: 10px;
+div#output,div#output canvas{
+  width: 100%;
+  height: 100%;
 }
-    button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-      padding-top: 5px;
-      padding-bottom: 5px;
-    }
-    fieldset+fieldset{
-          margin-top: 10px;
-    }
-    textarea{
-      width: 100%;
-      min-height: 200px;
-      font-size: 12px;
-      margin-bottom: 5px;
-    }
-    fieldset buttongroup{
-      display: table;
-      width: 100%;
-      table-layout: fixed;
-    }
-    fieldset buttongroup button{
-      display: table-cell;
-      width: 33.33%;
-    }
+button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+fieldset+fieldset{
+      margin-top: 10px;
+}
+textarea{
+  width: 100%;
+  min-height: 200px;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+fieldset buttongroup{
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+fieldset buttongroup button{
+  display: table-cell;
+  width: 33.33%;
+}
 
 .list {text-align: left;margin: 0;padding: 0;list-style: none;}
 .list li {margin-bottom: 10px;display: block;}

@@ -3,7 +3,6 @@
 <head>
   <title>Gravity visualization</title>
   <link rel="stylesheet" type="text/css" href="css/style.css">
-  <script src="js/html5.canvas/dist/canvas.min.js"></script>
   <script src="js/index.js"></script>
 </head>
 <body>
@@ -11,12 +10,22 @@
     <h1>The gravity</h1>
       <input type="checkbox" class="nav-trigger" id="nav-trigger"/>
       <label for="nav-trigger"><span></span></label>
-      <ul></ul>
+      <ul id="settings" class="list">
+        <li>
+          <p>Mass</p>
+          <div class="input-group">
+            <input type="number" name="mass" class="form-control" value="20" />
+            <span class="input-group-addon">kg</span>
+          </div>
+        </li>
+      </ul>
   </div>
-  <div id="output"></div>
+  <div id="output">
+    <canvas>Your browser doesn't support canvas!</canvas>
+  </div>
 <script type="text/javascript">
   window.onload=function(){
-    new Gravity(document.getElementById('output'));
+    new Gravity(document.getElementById('output'),document.getElementById('settings'));
   }
 </script>
 </body>
