@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Gravity visualization</title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="js/html5.canvas/dist/canvas.min.js"></script>
+  <script src="js/index.js"></script>
+</head>
+<body>
+    <div class="container">
+      <div id="menu">
+        <h1>The gravity</h1>
+      </div>
+      <div id="output"></div>
+    </div>
+    <script type="text/javascript">
+      window.onload=function(){
+        new Gravity(document.getElementById('output'));
+      }
+    </script>
+</body>
+</html>

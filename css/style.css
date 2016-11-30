@@ -1,0 +1,145 @@
+html,body{padding: 0;margin: 0;height: 100%;color:#444;}
+    div.container {
+      width: 100%; height: 100%;display: table;
+    }
+    h1{
+      text-align: center;
+      border-bottom: 1px solid #444;
+    padding-bottom: 3.33px;
+    }
+    div.container>* {
+      display: table-cell;    vertical-align: top;
+    }
+    div#menu {
+      width: 300px;
+      margin: 0;
+      padding: 0 10px;
+      background-color: #f0f0f0;
+      max-height: 100%;
+      overflow: auto;
+      height: 100%;
+
+    }
+    div#output{
+      padding: 10px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    fieldset+fieldset{
+          margin-top: 10px;
+    }
+    textarea{
+      width: 100%;
+      min-height: 200px;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+    fieldset buttongroup{
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+    fieldset buttongroup button{
+      display: table-cell;
+      width: 33.33%;
+    }
+
+.list {text-align: left;margin: 0;padding: 0;list-style: none;}
+.list li {margin-bottom: 10px;display: block;}
+.list li p{margin: 0px;display: inline-block;}
+.list li label,.list li div{float: right;}
+.input-group{
+  width: 80px;
+  position: relative;
+  display: table;
+  border-collapse: separate;
+  float: right;
+  box-sizing: none;
+}
+.input-group .form-control{
+  
+  display: table-cell;
+  position: relative;
+  z-index: 2;
+  float: left;
+  width: 100%;
+  padding: 3px 0 3px 5px;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.input-group .input-group-addon{
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 2px 4px 3px 10px;
+    line-height: 1;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+    display: table-cell;
+}
+.tgl{ display: none;}
+.tgl, .tgl:after, .tgl:before, .tgl *, .tgl *:after, .tgl *:before, .tgl + label {
+  box-sizing: border-box;
+}
+.tgl::-moz-selection, .tgl:after::-moz-selection, .tgl:before::-moz-selection, .tgl *::-moz-selection, .tgl *:after::-moz-selection, .tgl *:before::-moz-selection, .tgl + label::-moz-selection {
+  background: none;
+}
+.tgl::selection, .tgl:after::selection, .tgl:before::selection, .tgl *::selection, .tgl *:after::selection, .tgl *:before::selection, .tgl + label::selection {
+  background: none;
+}
+
+.tgl + label {
+  padding: 2px;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+  background: #fff;
+  border:1px solid #aaa;
+  border-radius: 2em;
+  outline: 0;
+  display: block;
+  width: 35px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+  background: #fff;
+  content: "";
+  border-radius: 1em;
+}
+.tgl + label:after{
+  position: relative;
+  display: block;
+  content: "";
+  width: 50%;
+  height: 100%;
+  left: 0;
+  background: #aaa;
+  border-radius: 1em;
+-webkit-transition: all .2s ease;
+  transition: all .2s ease;
+}
+.tgl:checked + label:after {
+  left: 50%;
+  background: #fff;
+}
+.tgl:checked + label {
+  background: #aaa;
+}
