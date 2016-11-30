@@ -1,28 +1,66 @@
 html,body{padding: 0;margin: 0;height: 100%;color:#444;}
-    div.container {
-      width: 100%; height: 100%;display: table;
-    }
-    h1{
-      text-align: center;
-      border-bottom: 1px solid #444;
-    padding-bottom: 3.33px;
-    }
-    div.container>* {
-      display: table-cell;    vertical-align: top;
-    }
-    div#menu {
-      width: 300px;
-      margin: 0;
-      padding: 0 10px;
-      background-color: #f0f0f0;
-      max-height: 100%;
-      overflow: auto;
-      height: 100%;
+div#menu {
+  width: 300px;
+  margin: 0;
+  padding: 0 10px;
+  background-color: rgba(240, 240, 240,0.7);
+  max-height: 100%;
+  overflow: hidden;
+  position: absolute;
+  left: 0;top: 0;
+}
+div#menu h1{
+  text-align: center;
+}
+#menu .nav-trigger{
+  opacity: 0;
+}
+#menu .nav-trigger,#menu .nav-trigger+label{
+  position: absolute;
+  top: 27px;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+  margin: 0;
+}
 
-    }
-    div#output{
-      padding: 10px;
-    }
+#menu .nav-trigger+label span, 
+#menu .nav-trigger+label span:before,
+#menu .nav-trigger+label span:after {
+  cursor: pointer;
+  border-radius: 1px;
+  height: 5px;
+  width: 100%;
+  background: #444;
+  position: absolute;
+  display: block;
+  content: '';
+}
+#menu .nav-trigger+label span:before {
+  top: 10px;
+}
+#menu .nav-trigger+label span:after {
+  bottom: -20px; 
+}
+
+#menu ul{
+  position: relative;
+  display: block;
+  list-style-type: none;
+  -webkit-font-smoothing: antialiased;
+  transition: height 0.5s ease;
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+#menu input:checked ~ ul{
+    height: 1500px;
+}
+
+div#output{
+  padding: 10px;
+}
     button {
       display: block;
       width: 100%;
