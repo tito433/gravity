@@ -6,26 +6,70 @@
   <script src="js/index.js"></script>
 </head>
 <body>
-  <div id="menu">
+  <header>
     <h1>The gravity</h1>
-      <input type="checkbox" class="nav-trigger" id="nav-trigger"/>
+    <div id="menu">
+      <input type="checkbox" checked="checked" class="nav-trigger" id="nav-trigger"/>
       <label for="nav-trigger"><span></span></label>
-      <ul id="settings" class="list">
-        <li>
-          <p>Mass</p>
-          <div class="input-group">
-            <input type="number" name="mass" class="form-control" value="20" />
-            <span class="input-group-addon">kg</span>
-          </div>
-        </li>
-      </ul>
-  </div>
-  <div id="output">
+      <nav>
+        <ul id="settings" class="list">
+          <li>
+            <p>Pulse</p>
+            <div class="input-group">
+              <input type="number" name="pulse" class="form-control" value="100" />
+              <span class="input-group-addon">ms</span>
+            </div>
+          </li>
+          <li>
+            <p>Mass</p>
+            <div class="input-group">
+              <input type="number" name="mass" class="form-control" value="200" />
+              <span class="input-group-addon">kg</span>
+            </div>
+          </li>
+        </ul>
+        <fieldset>
+          <legend>Create:</legend>
+          <buttongroup>
+            <button name="createRandsMass">Random</button>
+          </buttongroup>
+        </fieldset>
+        <fieldset>
+          <legend>Controll:</legend>
+          <buttongroup>
+            <button id="start">START</button>
+            <button id="move">STEP</button>
+            <button id="reset">RESET</button>
+          </buttongroup>
+        </fieldset>
+      </nav>
+    </div>
+  </header>
+  <section id="output">
     <canvas>Your browser doesn't support canvas!</canvas>
   </div>
 <script type="text/javascript">
   window.onload=function(){
-    new Gravity(document.getElementById('output'),document.getElementById('settings'));
+    var settings={};
+    document.querySelectorAll('#settings input').forEach(function(element, index) {
+        settings[element.name]=element.value;
+    });
+
+    var gravity=new Gravity(document.getElementById('output'),settings);
+    
+    document.getElementById('menu').querySelectorAll('button').forEach(function(element, index) {
+        var fn=element.name;
+        if(fn && typeof gravity[fn] === 'function'){
+          element.onclick=gravity[fn].bind(gravity);
+        }
+    });
+    document.getElementById('start').onclick=function(e){
+      var state=e.target.innerHTML;
+      e.target.innerHTML=state==='START'?'STOP':'START';
+      gravity.start();
+    }
+    document.getElementById('move').onclick=gravity.move.bind(gravity);
+    document.getElementById('reset').onclick=gravity.reset.bind(gravity);
   }
 </script>
 </body>
