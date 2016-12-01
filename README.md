@@ -1,7 +1,5 @@
-# gravity
-gravity visualization
-
-### Demo: [https://tito433.github.io/gravity/](https://tito433.github.io/gravity/)
+# The gravity ([https://tito433.github.io/gravity/](https://tito433.github.io/gravity/))
+Trying to visualize The gravity 
 
 
 ## References
