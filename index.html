@@ -21,16 +21,24 @@
             </div>
           </li>
           <li>
-            <p>Mass</p>
+            <p>Distance</p>
             <div class="input-group">
-              <input type="number" name="mass" class="form-control" value="200" />
-              <span class="input-group-addon">kg</span>
+              <input type="number" name="distance" class="form-control" value="10" />
+              <span class="input-group-addon"><a href="https://simple.wikipedia.org/wiki/Astronomical_unit">AU</a></span>
+            </div>
+          </li>
+          <li>
+            <p>Mass</p>
+            <div class="input-group" style="width: 130px">
+              <input type="number" name="mass" class="form-control" value="59.736" />
+              <span class="input-group-addon">×10<sup>23</sup> kg</span>
             </div>
           </li>
         </ul>
         <fieldset>
           <legend>Create:</legend>
           <buttongroup>
+            <button name="createSolar">Solar</button>
             <button name="createRandsMass">Random</button>
           </buttongroup>
         </fieldset>
@@ -51,11 +59,17 @@
 <script type="text/javascript">
   window.onload=function(){
     var settings={};
+    var gravity={};
+
     document.querySelectorAll('#settings input').forEach(function(element, index) {
         settings[element.name]=element.value;
+        element.onchange=function(e){
+          var name=e.target.name,value=e.target.value;
+          gravity.settings(name,value);
+        }
     });
 
-    var gravity=new Gravity(document.getElementById('output'),settings);
+    gravity=new Gravity(document.getElementById('output'),settings);
     
     document.getElementById('menu').querySelectorAll('button').forEach(function(element, index) {
         var fn=element.name;
