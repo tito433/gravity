@@ -65,15 +65,18 @@ function Canvas(canvas){
 	this.bounds=canvas.getBoundingClientRect();
 	canvas.width=this.width;
 	canvas.height=this.height;
+	var dx=canvas.width/2,dy=canvas.height/2;
+
 	this._mouse={};
     this.ctx=canvas.getContext("2d");
     this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
     this.ctx.fillStyle = 'rgba(0, 150, 255, 0.3)';
-
+    this.center=new Vertex(0, 11*dy/10, 0);
     this._drawables=[];
-    var dx=canvas.width/2,dy=canvas.height/2;
-    var project=function(M) {
-	    return new Vertex2D(M.x, M.z);
+    this.camera=200;
+    this.project=function(M) {
+	    var r = this.camera / M.y;
+	    return new Vertex2D(r * M.x, r * M.z);
 	}
 
     this.render=function(){
@@ -88,13 +91,13 @@ function Canvas(canvas){
 	            var face = this._drawables[i].faces[j];
 
 	            // Draw the first vertex
-	            var P = project(face[0]);
+	            var P = this.project(face[0]);
 	            ctx.beginPath();
 	            ctx.moveTo(P.x + dx, -P.y + dy);
 
 	            // Draw the other vertices
 	            for (var k = 1, n_vertices = face.length; k < n_vertices; ++k) {
-	                P = project(face[k]);
+	                P = this.project(face[k]);
 	                ctx.lineTo(P.x + dx, -P.y + dy);
 	            }
 
@@ -119,9 +122,6 @@ function Canvas(canvas){
     var mx = 0;
     var my = 0;
     var autorotate_timeout;
-
-    
-
     
 
     // Initialize the movement
@@ -151,7 +151,11 @@ function Canvas(canvas){
         mousedown = false;
         autorotate_timeout = setTimeout(this.autorotate.bind(this), 2000);
     }
-
+    this.zoom=function(e){
+    	var delta=e.wheelDelta/10;
+    	this.camera+=delta;
+    	this.render();
+    }
     this.autorotate=function() {
     	this._drawables.forEach(function(item,idx){
     		if(item.rotate && typeof item.rotate==='function')
@@ -165,4 +169,5 @@ function Canvas(canvas){
     canvas.addEventListener('mousedown', this.initMove.bind(this));
     canvas.addEventListener('mousemove', this.move.bind(this));
     canvas.addEventListener('mouseup', this.stopMove.bind(this));
+    canvas.addEventListener('wheel', this.zoom.bind(this),true);
 }

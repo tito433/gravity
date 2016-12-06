@@ -62,7 +62,7 @@
   var gravity={};
   function addCube(){
     console.log(this)
-    var cube = new Cube(new Vertex(0, 0, 0), 200);
+    var cube = new Cube(this.center, 200);
     this.add(cube);
   }
   window.onload=function(){
