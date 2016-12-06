@@ -7,4 +7,5 @@ Trying to visualize The gravity
 2. [3D Vector Plotter](https://academo.org/demos/3d-vector-plotter/)
 3. [Kepler's laws of planetary motion](https://en.wikipedia.org/wiki/Kepler's_laws_of_planetary_motion)
 4. [Two planet orbit example](https://academo.org/demos/keplers-third-law/)
-5. [3D Geometric Transformation](http://www.math.tau.ac.il/~dcor/Graphics/cg-slides/geom3d.pdf)
+5. [3D Rotation](https://www.siggraph.org/education/materials/HyperGraph/modeling/mod_tran/3drota.htm)
+6. [Building a 3D Engine with JavaScript](https://www.sitepoint.com/building-3d-engine-javascript/)

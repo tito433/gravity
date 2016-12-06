@@ -25,11 +25,23 @@ function Gravity(parent,domSett){
 	this.ctx=canvas.getContext("2d");
 	this.mass=[];
     this.pixPerAU=Math.min(this.width,this.height)/this.domSettings.distance;
-	
+	this._mouse={'drag':false,'x':0,'y':0};
+
     this.draw=function(){
 		var ctx=this.ctx;
 		ctx.clearRect(0,0,this.width,this.height);
         this.mass.forEach(function(mt){ mt.draw.call(mt,ctx); });
+        //draw axis
+        //draw center of mass
+        ctx.beginPath();
+        ctx.strokeStyle='#F00';
+        ctx.moveTo(this.center.x-10,this.center.y);
+        ctx.lineTo(this.center.x+10,this.center.y);
+        ctx.stroke();
+        ctx.moveTo(this.center.x,this.center.y-10);
+        ctx.lineTo(this.center.x,this.center.y+10);
+        ctx.stroke();
+        ctx.closePath();
 	};
     this.move=function(){
         for(var i=0,ln=this.mass.length;i<ln;i++){
@@ -47,11 +59,6 @@ function Gravity(parent,domSett){
         this.center.set(sumX/sumM,sumY/sumM);
     }
 
-	this._onClick=function(evt){
-		var x=evt.clientX - this.bounds.left,y=evt.clientY - this.bounds.top;
-		var m=parseInt(this._settings.mass),mass=new Mass(x,y,0,m);
-		this.mass.push(mass);
-	}
     this.createSolar=function(){
         this.mass=[];
         //the sun
@@ -116,7 +123,38 @@ function Gravity(parent,domSett){
         this.mass=[];
         this.draw();
     }
-	canvas.addEventListener("mouseup", this._onClick.bind(this), false);
+    this.onDrag=function(dx,dy){
+        this.mass.forEach(function(item){
+            item.rotateX((Math.PI/180)*dy);
+            item.rotateY((Math.PI/180)*dy);
+        });
+    }
+    this._mouseDown=function(evt){
+        this._mouse.drag=true;
+        this._mouse.x=evt.clientX - this.bounds.left;
+        this._mouse.y=evt.clientY - this.bounds.top;
+    };
+    this._mouseUp=function(evt){
+        
+        // var x=evt.clientX - this.bounds.left,y=evt.clientY - this.bounds.top;
+        // var m=parseInt(this._settings.mass),mass=new Mass(x,y,0,m);
+        // this.mass.push(mass);
+        this._mouse.drag=false;
+    };
+    
+    this._mouseMove=function(evt){
+        if(this._mouse.drag){
+            var x=evt.clientX - this.bounds.left,y=evt.clientY - this.bounds.top;
+            this.onDrag(x-this._mouse.x,y-this._mouse.y);
+            this._mouse.x=x;
+            this._mouse.y=y;
+        }
+    };
+
+
+    canvas.addEventListener("mousedown", this._mouseDown.bind(this), false);
+    canvas.addEventListener("mouseup", this._mouseUp.bind(this), false);
+	canvas.addEventListener("mousemove", this._mouseMove.bind(this), false);
     
     this.timer=window.setInterval(this.draw.bind(this),this._settings.pulse/10);
 }
@@ -207,6 +245,18 @@ Vector.prototype = {
     },
     clone: function() {
         return new Vector(this.x, this.y,this.z);
+    },
+    rotateX:function(deg){
+        var y=this.y,z=this.z;
+        this.y = y*Math.cos(deg) - z*Math.sin(deg);
+        this.z = y*Math.sin(deg) + z*Math.cos(deg);
+        return this;
+    },
+    rotateY:function(deg){
+        var x=this.x,z=this.z;
+        this.z = z*Math.cos(deg) - x*Math.sin(deg);
+        this.x= z*Math.sin(deg) + x*Math.cos(deg);
+        return this;
     },
     toString: function() {
         return '(x:' + this.x + ', y:' + this.y +  ', z:' + this.z+')';
