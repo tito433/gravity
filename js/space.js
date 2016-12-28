@@ -1,15 +1,29 @@
 "use strict";
-
-var Vertex = function(x, y, z) {
+function Vertex(x, y, z) {
     this.x = parseFloat(x);
     this.y = parseFloat(y);
     this.z = parseFloat(z);
+
+    this.rotate=function(theta, phi){
+            var ct = Math.cos(theta);
+	        var st = Math.sin(theta);
+	        var cp = Math.cos(phi);
+	        var sp = Math.sin(phi);
+	        // Rotation
+	        var x = this.x;
+	        var y = this.y;
+	        var z = this.z;
+
+	        this.x = ct * x - st * cp * y + st * sp * z + this.x;
+	        this.y = st * x + ct * cp * y - ct * sp * z + this.y;
+	        this.z = sp * y + cp * z + this.z;
+    }
 };
-var Vertex2D = function(x, y) {
+function Vertex2D(x, y) {
     this.x = parseFloat(x);
     this.y = parseFloat(y);
 };
-var Cube = function(center, size) {
+function Cube(center, size) {
     var d = size / 2;
     this.center=center;
     // Generate the vertices
@@ -51,10 +65,25 @@ var Cube = function(center, size) {
     	}
     }
 };
+function Sphere(center,radius,mass){
+	Vertex.call(this,center.x,center.y,center.z);
+	this.radius=radius;
+	this.mass=mass;
+	this._color='#'+Math.floor(Math.random()*16777215).toString(16);
+	this.color=function(){
+        if(arguments.length){
+            this._color=arguments[0];
+            return this;
+        }else{
+            return this._color;
+        }
+    }
+}
+Sphere.prototype = Object.create(Vertex.prototype);
+Sphere.prototype.constructor = Sphere;
 
 function Canvas(canvas){
 	var parent=canvas.parentNode;
-
 	var ppl=parseInt(window.getComputedStyle(parent, null).getPropertyValue('padding-left')),
         ppr=parseInt(window.getComputedStyle(parent, null).getPropertyValue('padding-right')),
         ppt=parseInt(window.getComputedStyle(parent, null).getPropertyValue('padding-top')),
@@ -62,51 +91,44 @@ function Canvas(canvas){
 
 	this.width=parent.clientWidth-ppl-ppr;
 	this.height=parent.clientHeight-ppt-ppb;
-	this.bounds=canvas.getBoundingClientRect();
 	canvas.width=this.width;
 	canvas.height=this.height;
 	var dx=canvas.width/2,dy=canvas.height/2;
 
-	this._mouse={};
+	this._settings=(arguments.length>1)?arguments[1]:{};
+
+	this._mouse={'down': false,'x':0,'y':0};
     this.ctx=canvas.getContext("2d");
-    this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-    this.ctx.fillStyle = 'rgba(0, 150, 255, 0.3)';
+    this.ctx.strokeStyle = 'rgba(68, 68, 68, 0.7)';
+    this.ctx.fillStyle = 'rgba(204, 204, 204, 0.7)';
+    
     this.center=new Vertex(0, 11*dy/10, 0);
     this._drawables=[];
-    this.camera=200;
+
+    this.camera=this._settings.camera||false;
+    this.pixelPerAU=this._settings.distance?Math.min(this.width,this.height)/this._settings.distance:1;
+
     this.project=function(M) {
-	    var r = this.camera / M.y;
+	    var r = this.camera?parseFloat(this.camera.value):1 / M.y;
 	    return new Vertex2D(r * M.x, r * M.z);
 	}
 
     this.render=function(){
-		var ctx=this.ctx;
-		ctx.clearRect(0,0,this.width,this.height);
+		this.ctx.clearRect(0,0,this.width,this.height);
 
 		//draw all objects
-		for (var i = 0, n_obj = this._drawables.length; i < n_obj; ++i) {
-	        // For each face
-	        for (var j = 0, n_faces = this._drawables[i].faces.length; j < n_faces; ++j) {
-	            // Current face
-	            var face = this._drawables[i].faces[j];
-
-	            // Draw the first vertex
-	            var P = this.project(face[0]);
-	            ctx.beginPath();
-	            ctx.moveTo(P.x + dx, -P.y + dy);
-
-	            // Draw the other vertices
-	            for (var k = 1, n_vertices = face.length; k < n_vertices; ++k) {
-	                P = this.project(face[k]);
-	                ctx.lineTo(P.x + dx, -P.y + dy);
-	            }
-
-	            // Close the path and draw the face
-	            ctx.closePath();
-	            ctx.stroke();
-	            ctx.fill();
-	        }
-	    }
+		this._drawables.forEach(function(item,idx){
+			var P = this.project(item);
+	        this.ctx.beginPath();
+	        this.ctx.moveTo(P.x + dx, -P.y + dy);
+			if(item instanceof Sphere){
+				this.ctx.arc(P.x + dx, -P.y + dy,item.radius,0,2*Math.PI);
+			}
+			// Close the path and draw the face
+            this.ctx.closePath();
+            this.ctx.stroke();
+            this.ctx.fill();
+		}.bind(this));
 	};
     
     this.add=function(drawable){
@@ -114,58 +136,43 @@ function Canvas(canvas){
     }
     this.clear=function(){
     	this._drawables=[];
+    	this.ctx.clearRect(0,0,this.width,this.height);
     }
-
-    this.render();
-    // Events
-    var mousedown = false;
-    var mx = 0;
-    var my = 0;
-    var autorotate_timeout;
     
 
-    // Initialize the movement
     this.initMove=function(evt) {
-        clearTimeout(autorotate_timeout);
-        mousedown = true;
-        mx = evt.clientX;
-        my = evt.clientY;
+        this._mouse.down = true;
+        this._mouse.x = evt.clientX;
+        this._mouse.y = evt.clientY;
     }
 
     this.move=function(evt) {
-        if (mousedown) {
-            var theta = (evt.clientX - mx) * Math.PI / 360;
-            var phi = (evt.clientY - my) * Math.PI / 180;
+        if (this._mouse.down) {
+            var theta = (evt.clientX - this._mouse.x) * Math.PI / 360;
+            var phi = (evt.clientY - this._mouse.y) * Math.PI / 180;
 
             for (var i = 0,ln=this._drawables.length; i < ln; ++i){
             	if(this._drawables[i].rotate && typeof this._drawables[i].rotate==='function')
                 this._drawables[i].rotate(theta, phi);
             }
-            mx = evt.clientX;
-            my = evt.clientY;
+            this._mouse.x = evt.clientX;
+            this._mouse.y = evt.clientY;
             this.render();
         }
     }
 
     this.stopMove=function() {
-        mousedown = false;
-        autorotate_timeout = setTimeout(this.autorotate.bind(this), 2000);
+        this._mouse.down = false;
     }
     this.zoom=function(e){
     	var delta=e.wheelDelta/10;
     	this.camera+=delta;
     	this.render();
     }
-    this.autorotate=function() {
-    	this._drawables.forEach(function(item,idx){
-    		if(item.rotate && typeof item.rotate==='function')
-            	item.rotate(-Math.PI / 720, Math.PI / 720);
-    	})
-        this.render();
-        autorotate_timeout = setTimeout(this.autorotate.bind(this), 30);
+    this.settings=function(name,val){
+        this._settings[name]=val;
+        this.pixelPerAU=Math.min(this.width,this.height)/this._settings.distance;
     }
-    autorotate_timeout = setTimeout(this.autorotate.bind(this), 2000);
-
     canvas.addEventListener('mousedown', this.initMove.bind(this));
     canvas.addEventListener('mousemove', this.move.bind(this));
     canvas.addEventListener('mouseup', this.stopMove.bind(this));

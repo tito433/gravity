@@ -2,97 +2,14 @@
 <html lang="en">
 <head>
   <title>Gravity visualization</title>
-  <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="js/space.js"></script>
 </head>
 <body>
-  <header>
-    <input type="checkbox" checked="checked" id="nav-toggle" class="nav-toggle"/>
-    <label for="nav-toggle"><span></span></label>
-    <div id="menu">
-      <h1>The gravity</h1>
-      <nav id="input">
-        <fieldset>
-          <legend>Settings:</legend>
-          <ul id="settings" class="list">
-            <!-- <li>
-              <p>Pulse</p>
-              <div class="input-group">
-                <input type="number" name="pulse" class="form-control" value="100" />
-                <span class="input-group-addon">ms</span>
-              </div>
-            </li>
-            <li>
-              <p>Distance</p>
-              <div class="input-group">
-                <input type="number" name="distance" class="form-control" value="10" />
-                <span class="input-group-addon"><a href="https://simple.wikipedia.org/wiki/Astronomical_unit">AU</a></span>
-              </div>
-            </li>
-            <li>
-              <p>Mass</p>
-              <div class="input-group" style="width: 130px">
-                <input type="number" name="mass" class="form-control" value="59.736" />
-                <span class="input-group-addon">×10<sup>23</sup> kg</span>
-              </div>
-            </li> -->
-          </ul>
-        </fieldset>
-        <fieldset>
-          <legend>View:</legend>
-          <buttongroup class="view">
-            <button name="addCube">Add Cube</button>
-          </buttongroup>
-        </fieldset>
-        <fieldset>
-          <legend>Controll:</legend>
-          <buttongroup class="controll">
-            <button id="start">START</button>
-            <button id="move">STEP</button>
-            <button id="reset">RESET</button>
-          </buttongroup>
-        </fieldset>
-      </nav>
-    </div>
-  </header>
   <article id="output">
     <canvas>Your browser doesn't support canvas!</canvas>
   </article>
 <script type="text/javascript">
-  var gravity={};
-  function addCube(){
-    console.log(this)
-    var cube = new Cube(this.center, 200);
-    this.add(cube);
-  }
-  window.onload=function(){
-    // var settings={};
-    
-
-    // document.querySelectorAll('#settings input').forEach(function(element, index) {
-    //     settings[element.name]=element.value;
-    //     element.onchange=function(e){
-    //       var name=e.target.name,value=e.target.value;
-    //       gravity.settings(name,value);
-    //     }
-    // });
-
-    gravity=new Canvas(document.querySelector('#output canvas'));
-    
-    document.querySelectorAll('button').forEach(function(element, index) {
-        var fn=element.name;
-        if(fn && typeof window[fn] === 'function'){
-          element.onclick=window[fn].bind(gravity);
-        }
-    });
-    // document.getElementById('start').onclick=function(e){
-    //   var state=e.target.innerHTML;
-    //   e.target.innerHTML=state==='START'?'STOP':'START';
-    //   gravity.start();
-    // }
-    // document.getElementById('move').onclick=gravity.move.bind(gravity);
-    // document.getElementById('reset').onclick=gravity.reset.bind(gravity);
-  }
+  var gravity=new Space(document.getElementById('output'));
 </script>
 </body>
 </html>
