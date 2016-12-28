@@ -1,5 +1,5 @@
-# The gravity ([demo](https://tito433.github.io/gravity/))
-Trying to visualize The gravity 
+# The Space ([demo](https://tito433.github.io/space/))
+Trying to visualize The Space 
 
 
 ## References
