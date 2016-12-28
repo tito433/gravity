@@ -3,13 +3,26 @@
 <head>
   <title>Gravity visualization</title>
   <script src="js/space.js"></script>
+  <style type="text/css">
+  	html,body,article{
+  		margin: 0;
+  		padding: 0;
+  		height: 100%;
+  	}
+  	body{
+  		padding: 10px;
+  		box-sizing: border-box;
+  	}
+  </style>
 </head>
 <body>
   <article id="output">
     <canvas>Your browser doesn't support canvas!</canvas>
   </article>
 <script type="text/javascript">
-  var gravity=new Space(document.getElementById('output'));
+  var space=new Space(document.getElementById('output'));
+  var cube = new Cube(new Vertex(0, 0, 0), 200);
+  space.add(cube);
 </script>
 </body>
 </html>
